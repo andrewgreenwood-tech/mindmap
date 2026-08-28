@@ -1,146 +1,1257 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markdown to Interactive Mind Map Converter</title>
-  
+
+  <title>Interactive Mind Map</title>
+
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"></script>
-  
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { display: flex; height: 100vh; background-color: #f4f6f8; }
-    
+
+    /* =========================================================
+       GLOBAL
+    ========================================================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f8f9fc;
+      --panel: rgba(255,255,255,0.94);
+      --border: #e7e8ee;
+      --text: #202124;
+      --muted: #74777f;
+      --primary: #6750a4;
+      --primary-dark: #563d91;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          circle at 70% 30%,
+          rgba(103,80,164,.045),
+          transparent 35%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+    }
+
+
+    /* =========================================================
+       APPLICATION
+    ========================================================= */
+
+    #app {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      position: relative;
+    }
+
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================= */
+
     #sidebar {
-      width: 35%;
-      padding: 20px;
+      width: 350px;
+      height: 100%;
+
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      background: #ffffff;
-      border-right: 1px solid #e0e0e0;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+
+      padding: 24px;
+
+      background: var(--panel);
+
+      border-right: 1px solid var(--border);
+
+      box-shadow:
+        4px 0 24px rgba(0,0,0,.035);
+
+      z-index: 20;
+    }
+
+
+    /* =========================================================
+       BRAND
+    ========================================================= */
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      margin-bottom: 6px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #8b72d8,
+          #6750a4
+        );
+
+      color: white;
+
+      font-size: 19px;
+
+      box-shadow:
+        0 4px 12px rgba(103,80,164,.25);
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -.25px;
+    }
+
+    .subtitle {
+      margin: 8px 0 20px 50px;
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      color: var(--muted);
+    }
+
+
+    /* =========================================================
+       EDITOR
+    ========================================================= */
+
+    .editor-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 8px;
+
+      font-size: 12px;
+      font-weight: 650;
+
+      color: #555861;
+
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .editor-hint {
+      font-size: 11px;
+      font-weight: 400;
+
+      color: #9a9ca3;
+
+      text-transform: none;
+      letter-spacing: 0;
     }
 
     textarea {
       flex: 1;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 14px;
+
+      width: 100%;
+
+      padding: 16px;
+
       resize: none;
+
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      background: #fbfbfd;
+
+      color: #303238;
+
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+      font-size: 13px;
+      line-height: 1.7;
+
       outline: none;
+
+      transition:
+        border .2s,
+        box-shadow .2s,
+        background .2s;
     }
 
-    textarea:focus { border-color: #0066cc; }
+    textarea:hover {
+      background: white;
+    }
 
-    .btn-group { display: flex; gap: 10px; }
+    textarea:focus {
+      background: white;
+
+      border-color: #a99bd1;
+
+      box-shadow:
+        0 0 0 4px rgba(103,80,164,.08);
+    }
+
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+
+    .button-area {
+      display: flex;
+      gap: 10px;
+
+      margin-top: 14px;
+    }
 
     button {
-      flex: 1;
-      padding: 12px;
       border: none;
-      border-radius: 6px;
-      font-weight: bold;
+
       cursor: pointer;
-      transition: background 0.2s;
+
+      font-family: inherit;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      transition:
+        transform .15s,
+        box-shadow .15s,
+        background .15s;
     }
 
-    .btn-render { background: #0066cc; color: white; }
-    .btn-render:hover { background: #0052a3; }
-    .btn-export { background: #28a745; color: white; }
-    .btn-export:hover { background: #218838; }
+    button:active {
+      transform: scale(.97);
+    }
+
+    .btn-render {
+      flex: 1;
+
+      padding: 13px 16px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #725bb0,
+          #604697
+        );
+
+      color: white;
+
+      box-shadow:
+        0 4px 12px rgba(103,80,164,.22);
+    }
+
+    .btn-render:hover {
+      box-shadow:
+        0 6px 18px rgba(103,80,164,.30);
+    }
+
+    .btn-export {
+      padding: 13px 16px;
+
+      border-radius: 12px;
+
+      background: white;
+
+      border: 1px solid var(--border);
+
+      color: #50525a;
+    }
+
+    .btn-export:hover {
+      background: #f8f7fc;
+
+      border-color: #d8d2e8;
+    }
+
+
+    /* =========================================================
+       MAP
+    ========================================================= */
 
     #map-container {
       flex: 1;
+
       position: relative;
-      background: #ffffff;
+
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(255,255,255,.98),
+          rgba(247,248,252,.95)
+        );
     }
 
-    svg { width: 100%; height: 100%; }
+    #markmap-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+
+    /* =========================================================
+       MAP HEADER
+    ========================================================= */
+
+    .map-header {
+      position: absolute;
+
+      top: 20px;
+      left: 24px;
+      right: 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      pointer-events: none;
+
+      z-index: 10;
+    }
+
+    .map-title {
+      padding: 9px 14px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,.82);
+
+      border:
+        1px solid rgba(230,231,236,.8);
+
+      backdrop-filter: blur(12px);
+
+      box-shadow:
+        0 3px 15px rgba(0,0,0,.05);
+
+      font-size: 13px;
+      font-weight: 600;
+
+      color: #5b5d65;
+    }
+
+
+    /* =========================================================
+       MAP CONTROLS
+    ========================================================= */
+
+    .map-controls {
+      position: absolute;
+
+      right: 24px;
+      bottom: 24px;
+
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+
+      z-index: 10;
+    }
+
+    .map-control {
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,.9);
+
+      border:
+        1px solid rgba(225,226,232,.9);
+
+      box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+
+      color: #555761;
+
+      font-size: 19px;
+
+      backdrop-filter: blur(12px);
+    }
+
+    .map-control:hover {
+      background: white;
+
+      box-shadow:
+        0 6px 20px rgba(0,0,0,.12);
+    }
+
+
+    /* =========================================================
+       MARKMAP
+    ========================================================= */
+
+    .markmap-node {
+      cursor: pointer;
+    }
+
+    .markmap-node circle {
+      stroke-width: 2px;
+    }
+
+    .markmap-node text {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif !important;
+
+      font-size: 14px !important;
+
+      fill: #303238 !important;
+    }
+
+    .markmap-node foreignObject {
+      overflow: visible;
+    }
+
+    .markmap-link {
+      fill: none;
+
+      stroke-linecap: round;
+
+      opacity: .48;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 800px) {
+
+      #sidebar {
+        width: 290px;
+        padding: 18px;
+      }
+
+      .subtitle {
+        margin-left: 0;
+      }
+
+      .map-header {
+        left: 12px;
+        right: 12px;
+        top: 12px;
+      }
+
+      .map-controls {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+
   </style>
+
 </head>
+
 <body>
 
-  <div id="sidebar">
-    <h2>Markdown Mind Map</h2>
-    <p style="font-size: 0.85rem; color: #666;">Paste your NotebookLM Markdown outline below:</p>
-    
-    <textarea id="markdown-input" placeholder="# Main Topic&#10;## Subtopic 1&#10;- Detail A&#10;- Detail B&#10;## Subtopic 2&#10;- Detail C"></textarea>
-    
-    <div class="btn-group">
-      <button class="btn-render" onclick="updateMap()">Generate Map</button>
-      <button class="btn-export" onclick="exportStandaloneHTML()">Download HTML</button>
+<div id="app">
+
+  <!-- =======================================================
+       SIDEBAR
+  ======================================================== -->
+
+  <aside id="sidebar">
+
+```
+<div class="brand">
+
+  <div class="brand-icon">
+    ✦
+  </div>
+
+  <h1>Mind Map</h1>
+
+</div>
+
+
+<div class="subtitle">
+  Turn your Markdown outline into an interactive visual map.
+</div>
+
+
+<div class="editor-label">
+
+  <span>Markdown</span>
+
+  <span class="editor-hint">
+    Use # headings
+  </span>
+
+</div>
+
+
+<textarea
+  id="markdown-input"
+  spellcheck="false"
+  placeholder="# Main Topic
+```
+
+## Subtopic
+
+* Key idea
+* Another idea
+
+## Another Subtopic
+
+* Important detail"></textarea>
+
+    <div class="button-area">
+
+  ```
+  <button
+    class="btn-render"
+    onclick="updateMap()">
+
+    ✦ Generate Map
+
+  </button>
+
+  <button
+    class="btn-export"
+    onclick="exportStandaloneHTML()">
+
+    Export
+
+  </button>
+  ```
+
     </div>
+
+  </aside>
+
+  <!-- =======================================================
+       MAP AREA
+  ======================================================== -->
+
+  <main id="map-container">
+
+    <div class="map-header">
+
+  ```
+  <div class="map-title">
+    Interactive Mind Map
   </div>
+  ```
 
-  <div id="map-container">
-    <svg id="markmap-svg"></svg>
-  </div>
+    </div>
 
-  <script>
-    const { Transformer, Markmap } = window.markmap;
-    const transformer = new Transformer();
-    let mmInstance = null;
+  <svg id="markmap-svg"></svg>
 
-    // Default sample data
-    document.getElementById('markdown-input').value = `# Root Topic\n## Central Idea 1\n- Key Point A\n- Key Point B\n## Central Idea 2\n- Key Point C`;
+    <div class="map-controls">
 
-    function updateMap() {
-      const markdown = document.getElementById('markdown-input').value;
-      const { root } = transformer.transform(markdown);
-      
-      const svgEl = document.getElementById('markmap-svg');
-      svgEl.innerHTML = ''; // Clear previous render
+  ```
+  <button
+    class="map-control"
+    title="Zoom in"
+    onclick="zoomIn()">
 
-      mmInstance = Markmap.create(svgEl, {
-        duration: 300,
-        zoom: true,
-        pan: true
-      }, root);
+    +
+
+  </button>
+
+
+  <button
+    class="map-control"
+    title="Zoom out"
+    onclick="zoomOut()">
+
+    −
+
+  </button>
+
+
+  <button
+    class="map-control"
+    title="Fit map"
+    onclick="fitMap()">
+
+    ⛶
+
+  </button>
+  ```
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+  /* =========================================================
+     MARKMAP
+  ========================================================= */
+
+  const {
+    Transformer,
+    Markmap
+  } = window.markmap;
+
+  const transformer =
+    new Transformer();
+
+  let mmInstance = null;
+
+
+  /* =========================================================
+     DEFAULT EXAMPLE
+  ========================================================= */
+
+  document
+    .getElementById("markdown-input")
+    .value =
+`# Learning a New Language
+
+## Vocabulary
+
+- Learn useful everyday words
+- Build topic-based vocabulary
+- Review regularly
+
+## Grammar
+
+- Understand sentence structure
+- Learn common verb patterns
+- Practice through examples
+
+## Listening
+
+- Watch short videos
+- Listen to conversations
+- Identify key information
+
+## Speaking
+
+- Practice pronunciation
+- Use new vocabulary
+- Have real conversations`;
+
+
+  /* =========================================================
+     CLEAN MARKDOWN
+     
+     This is designed specifically to handle content copied
+     from NotebookLM or other AI tools.
+  ========================================================= */
+
+  function cleanMarkdown(markdown) {
+
+    if (!markdown) {
+      return "";
     }
 
-    // Initial render on load
-    window.onload = updateMap;
 
-    // Export standalone viewable HTML file
-    function exportStandaloneHTML() {
-      const markdown = document.getElementById('markdown-input').value;
-      
-      const standaloneContent = `<!DOCTYPE html>
-<html>
+    /*
+      Normalize line endings.
+    */
+
+    markdown =
+      markdown.replace(/\r\n/g, "\n");
+
+
+    /*
+      Remove everything BEFORE the first Markdown heading.
+
+      Example:
+
+      "Here is your mind map:
+
+       # Main Topic"
+
+      becomes:
+
+      "# Main Topic"
+    */
+
+    const firstHeading =
+      markdown.search(/^#{1,6}\s+/m);
+
+
+    if (firstHeading !== -1) {
+
+      markdown =
+        markdown.substring(firstHeading);
+
+    }
+
+
+    /*
+      Remove leading/trailing whitespace.
+    */
+
+    markdown =
+      markdown.trim();
+
+
+    /*
+      Split into lines so we can remove obvious trailing
+      AI commentary.
+    */
+
+    const lines =
+      markdown.split("\n");
+
+
+    const cleanedLines = [];
+
+
+    let hasStarted = false;
+
+
+    for (let i = 0; i < lines.length; i++) {
+
+      const line =
+        lines[i].trim();
+
+
+      /*
+        Ignore empty lines before the map begins.
+      */
+
+      if (!hasStarted && line === "") {
+        continue;
+      }
+
+
+      /*
+        We have reached the actual map.
+      */
+
+      hasStarted = true;
+
+
+      /*
+        Keep:
+
+        # headings
+        - bullets
+        * bullets
+        + bullets
+        indented bullets
+        normal continuation text
+        blank lines
+      */
+
+      cleanedLines.push(lines[i]);
+
+    }
+
+
+    /*
+      Remove trailing blank lines.
+    */
+
+    while (
+      cleanedLines.length > 0 &&
+      cleanedLines[
+        cleanedLines.length - 1
+      ].trim() === ""
+    ) {
+
+      cleanedLines.pop();
+
+    }
+
+
+    return cleanedLines.join("\n").trim();
+
+  }
+
+
+  /* =========================================================
+     GENERATE MAP
+  ========================================================= */
+
+  function updateMap() {
+
+    let markdown =
+      document
+        .getElementById("markdown-input")
+        .value;
+
+
+    /*
+      Clean copied content first.
+    */
+
+    markdown =
+      cleanMarkdown(markdown);
+
+
+    /*
+      Show the cleaned Markdown back to the user.
+    */
+
+    document
+      .getElementById("markdown-input")
+      .value =
+      markdown;
+
+
+    if (!markdown.trim()) {
+
+      alert(
+        "Please enter some Markdown beginning with a # heading."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Transform Markdown into Markmap data.
+    */
+
+    const {
+      root
+    } =
+      transformer.transform(markdown);
+
+
+    const svgEl =
+      document.getElementById(
+        "markmap-svg"
+      );
+
+
+    /*
+      Clear previous map.
+    */
+
+    svgEl.innerHTML = "";
+
+
+    /*
+      Create the new map.
+    */
+
+    mmInstance =
+      Markmap.create(
+
+        svgEl,
+
+        {
+
+          duration: 450,
+
+          zoom: true,
+
+          pan: true,
+
+          autoFit: true,
+
+          spacingVertical: 12,
+
+          spacingHorizontal: 90,
+
+          maxWidth: 260,
+
+          paddingX: 10
+
+        },
+
+        root
+
+      );
+
+
+    /*
+      Make sure the entire map is visible.
+    */
+
+    setTimeout(
+      () => fitMap(),
+      500
+    );
+
+  }
+
+
+  /* =========================================================
+     FIT MAP
+  ========================================================= */
+
+  function fitMap() {
+
+    if (!mmInstance) {
+      return;
+    }
+
+    mmInstance.fit();
+
+  }
+
+
+  /* =========================================================
+     ZOOM IN
+  ========================================================= */
+
+  function zoomIn() {
+
+    if (!mmInstance) {
+      return;
+    }
+
+
+    const svg =
+      document.getElementById(
+        "markmap-svg"
+      );
+
+
+    const selection =
+      d3.select(svg);
+
+
+    selection
+      .transition()
+      .duration(200)
+      .call(
+        d3.zoom().scaleBy,
+        1.25
+      );
+
+  }
+
+
+  /* =========================================================
+     ZOOM OUT
+  ========================================================= */
+
+  function zoomOut() {
+
+    if (!mmInstance) {
+      return;
+    }
+
+
+    const svg =
+      document.getElementById(
+        "markmap-svg"
+      );
+
+
+    const selection =
+      d3.select(svg);
+
+
+    selection
+      .transition()
+      .duration(200)
+      .call(
+        d3.zoom().scaleBy,
+        0.8
+      );
+
+  }
+
+
+  /* =========================================================
+     KEYBOARD SHORTCUT
+  ========================================================= */
+
+  document
+    .getElementById("markdown-input")
+    .addEventListener(
+      "keydown",
+      function(e) {
+
+        /*
+          Ctrl + Enter
+          or
+          Cmd + Enter
+        */
+
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          e.key === "Enter"
+        ) {
+
+          e.preventDefault();
+
+          updateMap();
+
+        }
+
+      }
+    );
+
+
+  /* =========================================================
+     EXPORT STANDALONE HTML
+  ========================================================= */
+
+  function exportStandaloneHTML() {
+
+    /*
+      Clean the Markdown before exporting.
+    */
+
+    const markdown =
+      cleanMarkdown(
+        document
+          .getElementById(
+            "markdown-input"
+          )
+          .value
+      );
+
+
+    /*
+      Escape characters that could break
+      the JavaScript template string.
+    */
+
+    const safeMarkdown =
+      markdown
+        .replace(/\\/g, "\\\\")
+        .replace(/`/g, "\\`")
+        .replace(/\${/g, "\\${");
+
+
+    const standaloneContent =
+`<!DOCTYPE html>
+
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Interactive Mind Map</title>
-  <style>
-    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
-    svg { width: 100vw; height: 100vh; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"><\/script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"><\/script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"><\/script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Interactive Mind Map</title>
+
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"><\\/script>
+
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"><\\/script>
+
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"><\\/script>
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+
+  margin: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #ffffff,
+      #f7f8fc
+    );
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+}
+
+
+svg {
+
+  width: 100vw;
+
+  height: 100vh;
+
+}
+
+
+.markmap-node text {
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif !important;
+
+  fill: #303238 !important;
+
+}
+
+</style>
+
 </head>
+
 <body>
-  <svg id="markmap"></svg>
-  <script>
-    const markdown = \`${markdown.replace(/`/g, '\\`').replace(/\${/g, '\\${')}\`;
-    const { Transformer, Markmap } = window.markmap;
-    const { root } = new Transformer().transform(markdown);
-    Markmap.create('#markmap', { zoom: true, pan: true }, root);
-  <\/script>
+
+<svg id="markmap"></svg>
+
+<script>
+
+const markdown =
+\`${safeMarkdown}\`;
+
+
+const {
+  Transformer,
+  Markmap
+} =
+window.markmap;
+
+
+const {
+  root
+} =
+new Transformer()
+  .transform(markdown);
+
+
+const mm =
+Markmap.create(
+
+  "#markmap",
+
+  {
+
+    duration: 450,
+
+    zoom: true,
+
+    pan: true,
+
+    autoFit: true,
+
+    spacingVertical: 12,
+
+    spacingHorizontal: 90,
+
+    maxWidth: 260,
+
+    paddingX: 10
+
+  },
+
+  root
+
+);
+
+
+setTimeout(
+  () => mm.fit(),
+  500
+);
+
+<\\/script>
+
+
 </body>
+
 </html>`;
 
-      const blob = new Blob([standaloneContent], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'interactive-mindmap.html';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    }
-  </script>
+
+    const blob =
+      new Blob(
+        [standaloneContent],
+        {
+          type: "text/html"
+        }
+      );
+
+
+    const url =
+      URL.createObjectURL(blob);
+
+
+    const a =
+      document.createElement("a");
+
+
+    a.href = url;
+
+
+    a.download =
+      "interactive-mindmap.html";
+
+
+    a.click();
+
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+
+  }
+
+
+  /* =========================================================
+     INITIAL RENDER
+  ========================================================= */
+
+  window.addEventListener(
+    "load",
+    updateMap
+  );
+
+</script>
+
 </body>
 </html>
+
