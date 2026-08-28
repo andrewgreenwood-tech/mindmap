@@ -12,10 +12,9 @@
 
   <title>Interactive Mind Map</title>
 
-
-  <!-- =======================================================
-       MARKMAP LIBRARIES
-  ======================================================== -->
+  <!-- =====================================================
+       MARKMAP
+  ====================================================== -->
 
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
@@ -24,15 +23,11 @@
   <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"></script>
 
 
-  <!-- =======================================================
-       STYLES
-  ======================================================== -->
+  <!-- =====================================================
+       STYLE
+  ====================================================== -->
 
   <style>
-
-    /* =====================================================
-       GLOBAL
-    ===================================================== */
 
     * {
       box-sizing: border-box;
@@ -40,12 +35,11 @@
       padding: 0;
     }
 
-
     :root {
 
       --background: #f7f8fc;
 
-      --panel: rgba(255, 255, 255, 0.96);
+      --panel: #ffffff;
 
       --border: #e5e7eb;
 
@@ -71,20 +65,7 @@
 
     body {
 
-      background:
-
-        radial-gradient(
-          circle at 72% 32%,
-          rgba(103, 80, 164, 0.055),
-          transparent 38%
-        ),
-
-        var(--background);
-
-      color: var(--text);
-
       font-family:
-
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
@@ -93,12 +74,16 @@
         Arial,
         sans-serif;
 
+      background: var(--background);
+
+      color: var(--text);
+
     }
 
 
     /* =====================================================
        APP
-    ===================================================== */
+    ====================================================== */
 
     #app {
 
@@ -111,12 +96,13 @@
 
 
     /* =====================================================
-       LEFT SIDEBAR
-    ===================================================== */
+       SIDEBAR
+    ====================================================== */
 
     #sidebar {
 
       width: 350px;
+
       height: 100%;
 
       padding: 24px;
@@ -125,21 +111,21 @@
 
       flex-direction: column;
 
-      background: var(--panel);
+      background: rgba(255,255,255,0.97);
 
       border-right: 1px solid var(--border);
 
       box-shadow:
-        3px 0 22px rgba(0, 0, 0, 0.035);
+        3px 0 22px rgba(0,0,0,0.035);
 
-      z-index: 20;
+      z-index: 10;
 
     }
 
 
     /* =====================================================
-       BRAND
-    ===================================================== */
+       HEADER
+    ====================================================== */
 
     .brand {
 
@@ -149,7 +135,7 @@
 
       gap: 12px;
 
-      margin-bottom: 6px;
+      margin-bottom: 7px;
 
     }
 
@@ -168,7 +154,6 @@
       border-radius: 12px;
 
       background:
-
         linear-gradient(
           135deg,
           #8972cf,
@@ -180,9 +165,8 @@
       font-size: 19px;
 
       box-shadow:
-
         0 4px 12px
-        rgba(103, 80, 164, 0.23);
+        rgba(103,80,164,0.22);
 
     }
 
@@ -193,19 +177,13 @@
 
       font-weight: 650;
 
-      letter-spacing: -0.25px;
-
     }
 
 
     .subtitle {
 
       margin:
-
-        7px
-        0
-        20px
-        50px;
+        0 0 20px 50px;
 
       color: var(--muted);
 
@@ -217,16 +195,16 @@
 
 
     /* =====================================================
-       EDITOR LABEL
-    ===================================================== */
+       LABEL
+    ====================================================== */
 
     .editor-label {
 
       display: flex;
 
-      align-items: center;
-
       justify-content: space-between;
+
+      align-items: center;
 
       margin-bottom: 8px;
 
@@ -259,8 +237,8 @@
 
 
     /* =====================================================
-       MARKDOWN EDITOR
-    ===================================================== */
+       TEXTAREA
+    ====================================================== */
 
     textarea {
 
@@ -273,7 +251,6 @@
       resize: none;
 
       border:
-
         1px solid
         var(--border);
 
@@ -284,7 +261,6 @@
       color: #303238;
 
       font-family:
-
         "SFMono-Regular",
         Consolas,
         "Liberation Mono",
@@ -297,7 +273,6 @@
       outline: none;
 
       transition:
-
         border 0.2s,
         box-shadow 0.2s,
         background 0.2s;
@@ -307,28 +282,27 @@
 
     textarea:hover {
 
-      background: #ffffff;
+      background: white;
 
     }
 
 
     textarea:focus {
 
-      background: #ffffff;
+      background: white;
 
       border-color: #a99bd1;
 
       box-shadow:
-
         0 0 0 4px
-        rgba(103, 80, 164, 0.08);
+        rgba(103,80,164,0.08);
 
     }
 
 
     /* =====================================================
-       BUTTON AREA
-    ===================================================== */
+       BUTTONS
+    ====================================================== */
 
     .button-area {
 
@@ -354,11 +328,9 @@
       font-weight: 600;
 
       transition:
-
         transform 0.15s,
         box-shadow 0.15s,
-        background 0.15s,
-        border-color 0.15s;
+        background 0.15s;
 
     }
 
@@ -370,10 +342,6 @@
     }
 
 
-    /* =====================================================
-       GENERATE BUTTON
-    ===================================================== */
-
     .btn-render {
 
       flex: 1;
@@ -383,7 +351,6 @@
       border-radius: 12px;
 
       background:
-
         linear-gradient(
           135deg,
           #725bb0,
@@ -393,9 +360,8 @@
       color: white;
 
       box-shadow:
-
         0 4px 12px
-        rgba(103, 80, 164, 0.20);
+        rgba(103,80,164,0.20);
 
     }
 
@@ -403,50 +369,13 @@
     .btn-render:hover {
 
       box-shadow:
-
         0 6px 18px
-        rgba(103, 80, 164, 0.28);
+        rgba(103,80,164,0.28);
 
     }
 
 
-    /* =====================================================
-       CLEAR BUTTON
-    ===================================================== */
-
-    .btn-clear {
-
-      padding: 13px 12px;
-
-      border-radius: 12px;
-
-      background: white;
-
-      border:
-
-        1px solid
-        var(--border);
-
-      color: #666971;
-
-    }
-
-
-    .btn-clear:hover {
-
-      background: #fff7f7;
-
-      border-color: #e6cccc;
-
-      color: #a14d4d;
-
-    }
-
-
-    /* =====================================================
-       EXPORT BUTTON
-    ===================================================== */
-
+    .btn-clear,
     .btn-export {
 
       padding: 13px 12px;
@@ -456,11 +385,19 @@
       background: white;
 
       border:
-
         1px solid
         var(--border);
 
-      color: #50525a;
+      color: #555861;
+
+    }
+
+
+    .btn-clear:hover {
+
+      background: #fff7f7;
+
+      color: #a14d4d;
 
     }
 
@@ -469,14 +406,12 @@
 
       background: #f8f7fc;
 
-      border-color: #d8d2e8;
-
     }
 
 
     /* =====================================================
-       MAP CONTAINER
-    ===================================================== */
+       MAP
+    ====================================================== */
 
     #map-container {
 
@@ -491,7 +426,7 @@
         radial-gradient(
           circle at center,
           #ffffff 0%,
-          #f8f9fc 100%
+          #f7f8fc 100%
         );
 
     }
@@ -508,7 +443,7 @@
 
     /* =====================================================
        MAP TITLE
-    ===================================================== */
+    ====================================================== */
 
     .map-title {
 
@@ -523,20 +458,17 @@
       border-radius: 12px;
 
       background:
-
-        rgba(255, 255, 255, 0.86);
+        rgba(255,255,255,0.86);
 
       border:
-
         1px solid
-        rgba(225, 226, 232, 0.9);
+        rgba(225,226,232,0.9);
 
       backdrop-filter: blur(12px);
 
       box-shadow:
-
         0 3px 15px
-        rgba(0, 0, 0, 0.055);
+        rgba(0,0,0,0.055);
 
       color: #5b5d65;
 
@@ -544,7 +476,7 @@
 
       font-weight: 600;
 
-      z-index: 10;
+      z-index: 5;
 
       pointer-events: none;
 
@@ -553,7 +485,7 @@
 
     /* =====================================================
        MAP CONTROLS
-    ===================================================== */
+    ====================================================== */
 
     .map-controls {
 
@@ -569,7 +501,7 @@
 
       gap: 7px;
 
-      z-index: 10;
+      z-index: 5;
 
     }
 
@@ -577,7 +509,6 @@
     .map-control {
 
       width: 42px;
-
       height: 42px;
 
       display: flex;
@@ -589,18 +520,15 @@
       border-radius: 12px;
 
       background:
-
-        rgba(255, 255, 255, 0.92);
+        rgba(255,255,255,0.92);
 
       border:
-
         1px solid
-        rgba(225, 226, 232, 0.95);
+        rgba(225,226,232,0.95);
 
       box-shadow:
-
         0 4px 15px
-        rgba(0, 0, 0, 0.08);
+        rgba(0,0,0,0.08);
 
       color: #555761;
 
@@ -615,22 +543,16 @@
 
       background: white;
 
-      box-shadow:
-
-        0 6px 20px
-        rgba(0, 0, 0, 0.12);
-
     }
 
 
     /* =====================================================
-       MARKMAP TYPOGRAPHY
-    ===================================================== */
+       MARKMAP TEXT
+    ====================================================== */
 
     .markmap-node text {
 
       font-family:
-
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
@@ -651,7 +573,7 @@
 
     /* =====================================================
        MOBILE
-    ===================================================== */
+    ====================================================== */
 
     @media (max-width: 800px) {
 
@@ -663,13 +585,11 @@
 
       }
 
-
       .subtitle {
 
         margin-left: 0;
 
       }
-
 
       .map-title {
 
@@ -678,7 +598,6 @@
         left: 12px;
 
       }
-
 
       .map-controls {
 
@@ -761,9 +680,7 @@
           class="btn-render"
           onclick="updateMap()"
         >
-
           ✦ Generate
-
         </button>
 
 
@@ -771,9 +688,7 @@
           class="btn-clear"
           onclick="clearContent()"
         >
-
           Clear
-
         </button>
 
 
@@ -781,9 +696,7 @@
           class="btn-export"
           onclick="exportStandaloneHTML()"
         >
-
           Export
-
         </button>
 
 
@@ -801,36 +714,14 @@
 
 
       <div class="map-title">
-
         Interactive Mind Map
-
       </div>
 
 
-      <svg
-        id="markmap-svg"
-      ></svg>
+      <svg id="markmap-svg"></svg>
 
 
       <div class="map-controls">
-
-
-        <button
-          class="map-control"
-          title="Zoom in"
-          onclick="zoomMap(1.25)"
-        >
-          +
-        </button>
-
-
-        <button
-          class="map-control"
-          title="Zoom out"
-          onclick="zoomMap(0.8)"
-        >
-          −
-        </button>
 
 
         <button
@@ -851,12 +742,16 @@
   </div>
 
 
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
   <script>
 
 
     /* =====================================================
-       MARKMAP SETUP
-    ===================================================== */
+       MARKMAP
+    ====================================================== */
 
     const {
       Transformer,
@@ -868,26 +763,23 @@
       new Transformer();
 
 
-    let mmInstance =
-      null;
+    let mmInstance = null;
 
 
     /* =====================================================
-       CLEAN NOTEBOOKLM CONTENT
+       CLEAN NOTEBOOKLM MARKDOWN
        
-       IMPORTANT:
+       Removes:
        
-       This does NOT modify the actual Markdown structure.
+       - Anything before the first #
+       - ```markdown
+       - ```md
+       - ```
        
-       It only removes:
-       
-       1. Text before the first Markdown heading
-       2. Opening ``` / ```markdown / ```md
-       3. Closing ```
-    ===================================================== */
+       It does NOT alter the actual outline.
+    ====================================================== */
 
     function cleanMarkdown(input) {
-
 
       if (!input) {
 
@@ -897,84 +789,38 @@
 
 
       let markdown =
-        input.replace(
-          /\r\n/g,
-          "\n"
+        input
+          .replace(/\r\n/g, "\n")
+          .trim();
+
+
+      /*
+        Remove opening code fence.
+      */
+
+      markdown =
+        markdown.replace(
+          /^```(?:markdown|md)?\s*/i,
+          ""
         );
 
 
+      /*
+        Remove closing code fence.
+      */
+
       markdown =
-        markdown.trim();
+        markdown.replace(
+          /\s*```\s*$/i,
+          ""
+        );
 
 
-      /* -----------------------------------------------
-         Remove opening code fence
-      ------------------------------------------------ */
+      /*
+        Find the FIRST Markdown heading.
 
-      if (
-        markdown.startsWith(
-          "```markdown"
-        )
-      ) {
-
-        markdown =
-          markdown
-            .substring(11)
-            .trim();
-
-      }
-
-      else if (
-        markdown.startsWith(
-          "```md"
-        )
-      ) {
-
-        markdown =
-          markdown
-            .substring(5)
-            .trim();
-
-      }
-
-      else if (
-        markdown.startsWith(
-          "```"
-        )
-      ) {
-
-        markdown =
-          markdown
-            .substring(3)
-            .trim();
-
-      }
-
-
-      /* -----------------------------------------------
-         Remove closing code fence
-      ------------------------------------------------ */
-
-      if (
-        markdown.endsWith(
-          "```"
-        )
-      ) {
-
-        markdown =
-          markdown
-            .substring(
-              0,
-              markdown.length - 3
-            )
-            .trim();
-
-      }
-
-
-      /* -----------------------------------------------
-         Find first Markdown heading
-      ------------------------------------------------ */
+        Everything before it is discarded.
+      */
 
       const heading =
         markdown.match(
@@ -983,19 +829,6 @@
 
 
       if (heading) {
-
-        /*
-          Keep EVERYTHING from the first # onward.
-
-          We do NOT alter:
-
-          - indentation
-          - bullets
-          - headings
-          - bold text
-          - nested bullets
-          - wording
-        */
 
         markdown =
           markdown.substring(
@@ -1012,7 +845,7 @@
 
     /* =====================================================
        GENERATE MAP
-    ===================================================== */
+    ====================================================== */
 
     function updateMap() {
 
@@ -1023,9 +856,9 @@
         );
 
 
-      /* -----------------------------------------------
-         Clean NotebookLM wrapper
-      ------------------------------------------------ */
+      /*
+        Clean NotebookLM paste.
+      */
 
       const markdown =
         cleanMarkdown(
@@ -1033,9 +866,9 @@
         );
 
 
-      /* -----------------------------------------------
-         Show cleaned Markdown in editor
-      ------------------------------------------------ */
+      /*
+        Put cleaned version back into editor.
+      */
 
       textarea.value =
         markdown;
@@ -1052,9 +885,9 @@
       }
 
 
-      /* -----------------------------------------------
-         Convert Markdown to Markmap tree
-      ------------------------------------------------ */
+      /*
+        Convert Markdown to Markmap tree.
+      */
 
       const {
         root
@@ -1064,29 +897,32 @@
         );
 
 
+      /*
+        Get SVG.
+      */
+
       const svg =
         document.getElementById(
           "markmap-svg"
         );
 
 
-      /* -----------------------------------------------
-         Remove previous map
-      ------------------------------------------------ */
+      /*
+        Remove previous map.
+      */
 
-      svg.innerHTML =
-        "";
+      svg.innerHTML = "";
 
 
-      /* -----------------------------------------------
-         CREATE MARKMAP
-         
-         initialExpandLevel: 1
-         
-         Root = level 0
-         ## sections = level 1
-         Everything underneath = collapsed
-      ------------------------------------------------ */
+      /*
+        Create map.
+       
+        IMPORTANT:
+       
+        Level 0 = root
+        Level 1 = ## sections
+        Level 2+ = collapsed
+      */
 
       mmInstance =
         Markmap.create(
@@ -1100,21 +936,19 @@
             initialExpandLevel: 1,
 
             /*
-              More vertical breathing room between
-              sibling categories.
+              Space between sibling branches.
             */
 
             spacingVertical: 18,
 
             /*
-              More space between the text and the
-              next branch of the tree.
+              Space between levels.
             */
 
             spacingHorizontal: 80,
 
             /*
-              Keep Markmap's native interaction.
+              Native Markmap controls.
             */
 
             zoom: true,
@@ -1128,13 +962,13 @@
         );
 
 
-      /* -----------------------------------------------
-         Fit after rendering
-      ------------------------------------------------ */
+      /*
+        Fit map after rendering.
+      */
 
       setTimeout(
 
-        () => {
+        function() {
 
           if (mmInstance) {
 
@@ -1152,15 +986,11 @@
 
 
     /* =====================================================
-       CLEAR
-    ===================================================== */
+       CLEAR EVERYTHING
+    ====================================================== */
 
     function clearContent() {
 
-
-      /*
-        Clear editor.
-      */
 
       document
         .getElementById(
@@ -1169,10 +999,6 @@
         .value = "";
 
 
-      /*
-        Clear map.
-      */
-
       document
         .getElementById(
           "markmap-svg"
@@ -1180,17 +1006,8 @@
         .innerHTML = "";
 
 
-      /*
-        Remove Markmap reference.
-      */
+      mmInstance = null;
 
-      mmInstance =
-        null;
-
-
-      /*
-        Return cursor to editor.
-      */
 
       document
         .getElementById(
@@ -1203,10 +1020,9 @@
 
     /* =====================================================
        FIT MAP
-    ===================================================== */
+    ====================================================== */
 
     function fitMap() {
-
 
       if (!mmInstance) {
 
@@ -1221,143 +1037,8 @@
 
 
     /* =====================================================
-       ZOOM
-       
-       Use Markmap's existing D3 zoom behaviour.
-    ===================================================== */
-
-    function zoomMap(factor) {
-
-
-      if (!mmInstance) {
-
-        return;
-
-      }
-
-
-      const svg =
-        document.getElementById(
-          "markmap-svg"
-        );
-
-
-      const selection =
-        d3.select(svg);
-
-
-      /*
-        Markmap uses D3 zoom internally.
-
-        Find the zoom behaviour that is attached
-        to the SVG.
-      */
-
-      const current =
-        d3.zoomTransform(svg);
-
-
-      const newScale =
-        Math.max(
-          0.1,
-          Math.min(
-            8,
-            current.k * factor
-          )
-        );
-
-
-      const rect =
-        svg.getBoundingClientRect();
-
-
-      const cx =
-        rect.width / 2;
-
-
-      const cy =
-        rect.height / 2;
-
-
-      const ratio =
-        newScale / current.k;
-
-
-      const tx =
-        cx -
-        (cx - current.x) *
-        ratio;
-
-
-      const ty =
-        cy -
-        (cy - current.y) *
-        ratio;
-
-
-      const transform =
-        d3.zoomIdentity
-          .translate(tx, ty)
-          .scale(newScale);
-
-
-      /*
-        Locate the zoom behaviour attached by Markmap.
-
-        This is deliberately done without replacing
-        Markmap's zoom behaviour.
-      */
-
-      const zoomBehavior =
-        selection.on(
-          "zoom"
-        );
-
-
-      /*
-        If Markmap's zoom behaviour is accessible
-        through the SVG's D3 data, use it.
-
-        Otherwise native wheel zoom continues to work.
-      */
-
-      try {
-
-        const node =
-          svg.__zoom;
-
-
-        if (node) {
-
-          /*
-            Use a temporary D3 zoom transform.
-
-            Native Markmap interaction remains intact.
-          */
-
-          selection
-            .transition()
-            .duration(180);
-
-        }
-
-      }
-      catch (error) {
-
-        /*
-          Ignore.
-
-          Native Markmap zoom remains available.
-        */
-
-      }
-
-    }
-
-
-    /* =====================================================
        CTRL + ENTER
-    ===================================================== */
+    ====================================================== */
 
     document
       .getElementById(
@@ -1369,7 +1050,6 @@
 
         function(event) {
 
-
           if (
 
             (event.ctrlKey ||
@@ -1379,9 +1059,7 @@
 
           ) {
 
-
             event.preventDefault();
-
 
             updateMap();
 
@@ -1393,55 +1071,78 @@
 
 
     /* =====================================================
-       EXPORT STANDALONE HTML
-    ===================================================== */
+       EXPORT
+       
+       IMPORTANT:
+       
+       The Markdown is NOT inserted directly into a
+       JavaScript string.
+       
+       Instead it is placed into a hidden textarea
+       in the exported HTML.
+       
+       This makes the export extremely reliable even
+       with complicated NotebookLM Markdown.
+    ====================================================== */
 
-   function exportStandaloneHTML() {
-
-  /*
-    Get the actual content from the editor
-    and clean any NotebookLM wrapper first.
-  */
-
-  const markdown =
-    cleanMarkdown(
-      document.getElementById("markdown-input").value
-    );
-
-
-  if (!markdown) {
-
-    alert(
-      "There is no mind map to export."
-    );
-
-    return;
-
-  }
+    function exportStandaloneHTML() {
 
 
-  /*
-    IMPORTANT:
-    JSON.stringify safely converts the Markdown
-    into a JavaScript string.
+      const markdown =
+        cleanMarkdown(
 
-    This avoids problems with:
-    - backticks
-    - quotes
-    - apostrophes
-    - ${...}
-    - Markdown formatting
-  */
+          document
+            .getElementById(
+              "markdown-input"
+            )
+            .value
 
-  const safeMarkdown =
-    JSON.stringify(markdown);
+        );
 
 
-  /*
-    Create the complete standalone HTML file.
-  */
+      if (!markdown) {
 
-  const standaloneContent = `<!DOCTYPE html>
+        alert(
+          "There is no mind map to export."
+        );
+
+        return;
+
+      }
+
+
+      /*
+        Encode the Markdown as HTML text.
+
+        This protects:
+        < > & "
+      */
+
+      const encodedMarkdown =
+        markdown
+          .replace(
+            /&/g,
+            "&amp;"
+          )
+          .replace(
+            /</g,
+            "&lt;"
+          )
+          .replace(
+            />/g,
+            "&gt;"
+          )
+          .replace(
+            /"/g,
+            "&quot;"
+          );
+
+
+      /*
+        Build standalone HTML.
+      */
+
+      const standaloneContent = `<!DOCTYPE html>
 
 <html lang="en">
 
@@ -1457,11 +1158,11 @@
 <title>Interactive Mind Map</title>
 
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7"><\\/script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"><\/script>
 
-<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"><\\/script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"><\/script>
 
-<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"><\\/script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"><\/script>
 
 
 <style>
@@ -1469,15 +1170,15 @@
 html,
 body {
 
-  margin: 0;
-
   width: 100%;
-
   height: 100%;
+
+  margin: 0;
 
   overflow: hidden;
 
   background:
+
     radial-gradient(
       circle at center,
       #ffffff 0%,
@@ -1487,7 +1188,7 @@ body {
 }
 
 
-svg {
+#markmap {
 
   width: 100vw;
 
@@ -1524,13 +1225,33 @@ svg {
 <body>
 
 
+<!--
+  The actual Markdown content is stored here.
+  It is NOT executable JavaScript.
+-->
+
+<textarea id="markdown-data" style="display:none;">${encodedMarkdown}</textarea>
+
+
 <svg id="markmap"></svg>
 
 
 <script>
 
-const markdown = ${safeMarkdown};
 
+/*
+  Read the actual Markdown from the hidden textarea.
+*/
+
+const markdown =
+  document.getElementById(
+    "markdown-data"
+  ).value;
+
+
+/*
+  Convert Markdown to a Markmap tree.
+*/
 
 const {
   Transformer,
@@ -1545,8 +1266,16 @@ const transformer =
 const {
   root
 } =
-  transformer.transform(markdown);
+  transformer.transform(
+    markdown
+  );
 
+
+/*
+  Create the exported map.
+
+  Same settings as the main application.
+*/
 
 const mm =
   Markmap.create(
@@ -1557,27 +1286,11 @@ const mm =
 
       duration: 300,
 
-      /*
-        Show the root and the ## sections.
-
-        Everything underneath starts collapsed.
-      */
-
       initialExpandLevel: 1,
-
-
-      /*
-        Extra breathing room.
-      */
 
       spacingVertical: 18,
 
       spacingHorizontal: 80,
-
-
-      /*
-        Native Markmap interaction.
-      */
 
       zoom: true,
 
@@ -1591,12 +1304,12 @@ const mm =
 
 
 /*
-  Fit the map after it has rendered.
+  Fit the map once rendered.
 */
 
 setTimeout(
 
-  () => {
+  function() {
 
     mm.fit();
 
@@ -1606,6 +1319,7 @@ setTimeout(
 
 );
 
+
 <\/script>
 
 
@@ -1614,238 +1328,9 @@ setTimeout(
 </html>`;
 
 
-  /*
-    Create the file.
-  */
-
-  const blob =
-    new Blob(
-      [standaloneContent],
-      {
-        type: "text/html;charset=utf-8"
-      }
-    );
-
-
-  /*
-    Create temporary download link.
-  */
-
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const link =
-    document.createElement("a");
-
-
-  link.href = url;
-
-  link.download =
-    "interactive-mindmap.html";
-
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  document.body.removeChild(link);
-
-
-  /*
-    Give the browser time to start the download
-    before releasing the object URL.
-  */
-
-  setTimeout(
-    () => URL.revokeObjectURL(url),
-    2000
-  );
-
-}
-
-
-      /* ===================================================
-         STANDALONE HTML
-      ==================================================== */
-
-      const standaloneContent =
-
-`<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>Interactive Mind Map</title>
-
-
-<script src="https://cdn.jsdelivr.net/npm/d3@7"><\\/script>
-
-<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4"><\\/script>
-
-<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4"><\\/script>
-
-
-<style>
-
-
-html,
-body {
-
-  margin: 0;
-
-  width: 100%;
-  height: 100%;
-
-  overflow: hidden;
-
-  background:
-
-    radial-gradient(
-      circle at center,
-      #ffffff,
-      #f7f8fc
-    );
-
-}
-
-
-svg {
-
-  width: 100vw;
-
-  height: 100vh;
-
-}
-
-
-.markmap-node text {
-
-  font-family:
-
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif !important;
-
-  fill: #303238 !important;
-
-}
-
-
-.markmap-link {
-
-  stroke-linecap: round;
-
-}
-
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<svg id="markmap"></svg>
-
-
-<script>
-
-
-const markdown =
-\`${safeMarkdown}\`;
-
-
-const {
-  Transformer,
-  Markmap
-} =
-window.markmap;
-
-
-const {
-  root
-} =
-new Transformer()
-  .transform(
-    markdown
-  );
-
-
-const mm =
-Markmap.create(
-
-  "#markmap",
-
-  {
-
-    duration: 300,
-
-    /*
-      Start with root + ## categories.
-      Deeper levels are collapsed.
-    */
-
-    initialExpandLevel: 1,
-
-    /*
-      Give categories more breathing room.
-    */
-
-    spacingVertical: 18,
-
-    spacingHorizontal: 80,
-
-    zoom: true,
-
-    pan: true
-
-  },
-
-  root
-
-);
-
-
-/*
-  Fit the initial map.
-*/
-
-setTimeout(
-
-  () => {
-
-    mm.fit();
-
-  },
-
-  400
-
-);
-
-
-<\\/script>
-
-
-</body>
-
-</html>`;
-
-
-      /* ===================================================
-         DOWNLOAD
-      ==================================================== */
+      /*
+        Create the HTML file.
+      */
 
       const blob =
         new Blob(
@@ -1853,11 +1338,16 @@ setTimeout(
           [standaloneContent],
 
           {
-            type: "text/html"
+            type:
+              "text/html;charset=utf-8"
           }
 
         );
 
+
+      /*
+        Create temporary download URL.
+      */
 
       const url =
         URL.createObjectURL(
@@ -1865,26 +1355,42 @@ setTimeout(
         );
 
 
+      /*
+        Create download link.
+      */
+
       const link =
         document.createElement(
           "a"
         );
 
 
-      link.href =
-        url;
-
+      link.href = url;
 
       link.download =
         "interactive-mindmap.html";
 
 
+      document.body.appendChild(
+        link
+      );
+
+
       link.click();
 
 
+      document.body.removeChild(
+        link
+      );
+
+
+      /*
+        Release URL after download begins.
+      */
+
       setTimeout(
 
-        () => {
+        function() {
 
           URL.revokeObjectURL(
             url
@@ -1892,32 +1398,11 @@ setTimeout(
 
         },
 
-        1000
+        2000
 
       );
 
     }
-
-
-    /* =====================================================
-       START EMPTY
-    ===================================================== */
-
-    window.addEventListener(
-
-      "load",
-
-      function() {
-
-        document
-          .getElementById(
-            "markdown-input"
-          )
-          .focus();
-
-      }
-
-    );
 
 
   </script>
